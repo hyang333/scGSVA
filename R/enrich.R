@@ -41,7 +41,7 @@ scgsva <- function(obj, annot = NULL,
                    mx.diff=TRUE,
                    ssgsea.norm=TRUE,
                    useTerm=TRUE,
-                   cores = 4,
+                   cores = 8,
                    verbose=TRUE) {
     tau=switch(method, gsva=1, ssgsea=0.25, NA)
     if(is.null(annot)) {
@@ -81,7 +81,12 @@ scgsva <- function(obj, annot = NULL,
                  verbose=verbose
                  )
     annot <- annot[annot[,1]%in%rownames(input),]
-    annot <- annot[order(annot[,3]),]
+    if(isTRUE(useTerm)){
+        annot <- annot[order(annot[,3]),]
+    }else{
+        annot <- annot[order(annot[,2]),]
+    }
+
     res<-new("GSVA",
              obj=obj,
              gsva=out,
